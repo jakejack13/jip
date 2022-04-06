@@ -1,4 +1,4 @@
-#include "include/counter.h"
+#include "counter.h"
 
 #define NUMCHARS 256
 

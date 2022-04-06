@@ -1,2 +1,4 @@
 # Object files
 *.o
+build/
+main
