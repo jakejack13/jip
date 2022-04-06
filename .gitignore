@@ -1,4 +1,7 @@
 # Object files
 *.o
 build/
+
+# Executables
 main
+test.out
