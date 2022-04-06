@@ -10,12 +10,12 @@ struct counter {
 
 // Kept for backwards compatibility
 void counter_init(struct counter *c) {
-    return;
+    for (int i = 0; i < NUMCHARS; i++) c->counts[i] = 0;
 }
 
 // Kept for backwards compatibility
 void counter_free(struct counter *c) {
-    return;
+    for (int i = 0; i < NUMCHARS; i++) c->counts[i] = 0;
 }
 
 void counter_add(struct counter *c, char ch) {
