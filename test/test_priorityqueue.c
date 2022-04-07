@@ -22,7 +22,7 @@ static void priorityqueue_test_add_one_char(struct testresults *results) {
     free(pq);
 }
 
-static void priorityqueue_test_add_many_int(struct testresults *results) {
+static void priorityqueue_test_add_many_int_forward(struct testresults *results) {
     #define SIZE 100
     struct priorityqueue *pq = malloc(sizeof(struct priorityqueue *));
     priorityqueue_init(pq);
@@ -34,10 +34,23 @@ static void priorityqueue_test_add_many_int(struct testresults *results) {
     free(pq);
 }
 
+static void priorityqueue_test_add_many_int_backward(struct testresults *results) {
+    #define SIZE 100
+    struct priorityqueue *pq = malloc(sizeof(struct priorityqueue *));
+    priorityqueue_init(pq);
+    int arr[SIZE];
+    for (int i = 0; i < SIZE; i++) arr[i] = i;
+    for (int i = SIZE-1; i >= 0; i--) priorityqueue_add(pq, arr+i, i);
+    for (int i = 0; i < SIZE; i++) assert((int) i, (int) *((int *)priorityqueue_get(pq)), "test_priorityqueue, priorityqueue_test_add_many_int, priorityqueue_get", results);
+    priorityqueue_free(pq);
+    free(pq);
+}
+
 
 void test_priorityqueue_main(struct testresults *results) {
     priorityqueue_test_add_one_char(results);
-    priorityqueue_test_add_many_int(results);
+    priorityqueue_test_add_many_int_forward(results);
+    priorityqueue_test_add_many_int_backward(results);
 }
 
 #endif //TEST_PRIORITYQUEUE_C
