@@ -5,7 +5,9 @@
 #define NUMCHARS 256
 
 /** The data structure for counting characters */
-struct counter;
+struct counter {
+    unsigned int counts[NUMCHARS];
+};
 
 /** Intitializes the counter */
 void counter_init(struct counter *c);
@@ -19,7 +21,8 @@ void counter_add(struct counter *c, char ch);
 /** Returns the number of times a character has been added to the counter */
 unsigned int counter_get(struct counter *c, char ch);
 
-/** Fills the given array with all characters in order or most frequent to least frequent */
-void counter_rank(struct counter *c, char *arr);
+/** Fills the given array with the counts of each characterm with the index
+ * corresponding to the character */
+void counter_fill(struct counter *c, int *arr);
 
 #endif //COUNTER_H

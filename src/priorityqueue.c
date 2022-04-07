@@ -10,12 +10,6 @@ struct node {
     int priority;
 };
 
-struct priorityqueue {
-    struct node **queue;
-    int size;
-    int capacity;
-};
-
 /** Swaps the memory locations */
 static void swap(struct node **a, struct node **b) {
   struct node *temp = *b;

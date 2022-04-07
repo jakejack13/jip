@@ -3,9 +3,14 @@
 
 #include <stdbool.h>
 
+struct node;
 
 /** The data structure for the priority queue */
-struct priorityqueue;
+struct priorityqueue {
+    struct node **queue;
+    int size;
+    int capacity;
+};
 
 
 /** Initializes the priority queue with compare function f */

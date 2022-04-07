@@ -8,7 +8,7 @@
 
 
 static void priorityqueue_test_add_one_char(struct testresults *results) {
-    struct priorityqueue *pq = malloc(sizeof(struct priorityqueue *));
+    struct priorityqueue *pq = malloc(sizeof(struct priorityqueue));
     priorityqueue_init(pq);
     char a = 'a';
     priorityqueue_add(pq, &a, 1);
@@ -24,7 +24,7 @@ static void priorityqueue_test_add_one_char(struct testresults *results) {
 
 static void priorityqueue_test_add_many_int_forward(struct testresults *results) {
     #define SIZE 100
-    struct priorityqueue *pq = malloc(sizeof(struct priorityqueue *));
+    struct priorityqueue *pq = malloc(sizeof(struct priorityqueue));
     priorityqueue_init(pq);
     int arr[SIZE];
     for (int i = 0; i < SIZE; i++) arr[i] = i;
@@ -36,7 +36,7 @@ static void priorityqueue_test_add_many_int_forward(struct testresults *results)
 
 static void priorityqueue_test_add_many_int_backward(struct testresults *results) {
     #define SIZE 100
-    struct priorityqueue *pq = malloc(sizeof(struct priorityqueue *));
+    struct priorityqueue *pq = malloc(sizeof(struct priorityqueue));
     priorityqueue_init(pq);
     int arr[SIZE];
     for (int i = 0; i < SIZE; i++) arr[i] = i;
