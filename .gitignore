@@ -7,5 +7,8 @@ main
 jip
 test.out
 
+# Test files
+*.txt
+
 # VSCode
 .vscode/
