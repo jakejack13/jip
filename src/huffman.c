@@ -8,7 +8,10 @@ void huffman_init(struct huffman_node *h, char c, int frequency) {
 }
 
 void huffman_free(struct huffman_node *h) {
-    return;
+    if (h == NULL) return;
+    huffman_free(h->left);
+    huffman_free(h->right);
+    free(h);
 }
 
 void huffman_add_left(struct huffman_node *root, struct huffman_node *left) {
@@ -17,6 +20,11 @@ void huffman_add_left(struct huffman_node *root, struct huffman_node *left) {
 
 void huffman_add_right(struct huffman_node *root, struct huffman_node *right) {
     root->right = right;
+}
+
+int huffman_get_frequency(struct huffman_node *h) {
+    if (h == NULL) return 0;
+    return h->frequency;
 }
 
 int huffman_get_code(struct huffman_node *h, char c) {
@@ -28,6 +36,6 @@ int huffman_get_code(struct huffman_node *h, char c) {
     int result = huffman_get_code(h->left, c);
     if (result != -1) return result << 1;
     result = huffman_get_code(h->right, c);
-    if (result != -1) return result << 1 + 1;
+    if (result != -1) return (result << 1) + 1;
     return -1;
 }

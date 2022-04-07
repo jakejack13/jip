@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "counter.h"
-#include "priorityqueue.h"
-#include "huffman.h"
 #include "compress.h"
 
 #define USAGE "usage: jip -c/-d <origin> <destination>\n"
@@ -16,7 +13,7 @@ int main(int argc, char *argv[]) {
     }
 
     FILE *input = fopen(argv[2], "r");
-    FILE *output = fopen(argv[2], "w+");
+    FILE *output = fopen(argv[3], "w+");
     if (input == NULL || output == NULL) {
         printf("jip: could not open file\n");
         printf(USAGE);
@@ -32,4 +29,7 @@ int main(int argc, char *argv[]) {
         printf(USAGE);
         return 1;
     }
+
+    fclose(input);
+    fclose(output);
 }

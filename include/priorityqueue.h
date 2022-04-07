@@ -13,7 +13,7 @@ struct priorityqueue {
 };
 
 
-/** Initializes the priority queue with compare function f */
+/** Initializes the priority queue */
 void priorityqueue_init(struct priorityqueue *pq);
 
 /** Frees the priority queue in memory */
@@ -27,5 +27,7 @@ void *priorityqueue_get(struct priorityqueue *pq);
 
 /** Returns the element with the highest priority */
 void *priorityqueue_peek(struct priorityqueue *pq);
+
+int priorityqueue_length(struct priorityqueue *pq);
 
 #endif //PRIORITYQUEUE_H

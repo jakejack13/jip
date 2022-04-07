@@ -22,6 +22,8 @@ void huffman_add_left(struct huffman_node *root, struct huffman_node *left);
 /** Adds a new right Huffman node to the root node */
 void huffman_add_right(struct huffman_node *root, struct huffman_node *right);
 
+int huffman_get_frequency(struct huffman_node *h);
+
 /** Returns the Huffman code for the character */
 int huffman_get_code(struct huffman_node *h, char c);
 #endif //HUFFMAN_H

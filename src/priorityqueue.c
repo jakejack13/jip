@@ -81,10 +81,11 @@ void priorityqueue_add(struct priorityqueue *pq, void *elm, int priority) {
 void *priorityqueue_get(struct priorityqueue *pq) {
     struct node *result = pq->queue[0];
     pq->queue[0] = NULL;
+    if (result == NULL) return NULL;
+    pq->size--;
     for (int i = pq->size / 2 - 1; i >= 0; i--) {
         heapify(pq, i);
     }
-    if (result == NULL) return NULL;
     void *elm = result->elm;
     free(result);
     return elm;
@@ -92,4 +93,8 @@ void *priorityqueue_get(struct priorityqueue *pq) {
 
 void *priorityqueue_peek(struct priorityqueue *pq) {
     return pq->queue[0];
+}
+
+int priorityqueue_length(struct priorityqueue *pq) {
+    return pq->size;
 }
