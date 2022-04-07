@@ -7,10 +7,10 @@
 /** The data structure for counting characters */
 struct counter;
 
-/** Intitializes a counter */
+/** Intitializes the counter */
 void counter_init(struct counter *c);
 
-/** Frees a counter in memory */
+/** Frees the counter in memory */
 void counter_free(struct counter *c);
 
 /** Adds a character to the counter */

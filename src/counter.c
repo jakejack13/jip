@@ -8,12 +8,10 @@ struct counter {
 };
 
 
-// Kept for backwards compatibility
 void counter_init(struct counter *c) {
     for (int i = 0; i < NUMCHARS; i++) c->counts[i] = 0;
 }
 
-// Kept for backwards compatibility
 void counter_free(struct counter *c) {
     for (int i = 0; i < NUMCHARS; i++) c->counts[i] = 0;
 }
