@@ -4,6 +4,7 @@ build/
 
 # Executables
 main
+jip
 test.out
 
 # VSCode
