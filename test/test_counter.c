@@ -7,7 +7,7 @@
 #include "counter.h"
 
 
-static void test_add_one_char(struct testresults *results) {
+static void counter_test_add_one_char(struct testresults *results) {
     struct counter *c = malloc(sizeof(struct counter *));
     counter_init(c);
     counter_add(c, 'a');
@@ -19,7 +19,7 @@ static void test_add_one_char(struct testresults *results) {
     free(c);
 }
 
-static void test_one_rank(struct testresults *results) {
+static void counter_test_one_rank(struct testresults *results) {
     struct counter *c = malloc(sizeof(struct counter *));
     counter_init(c);
     counter_add(c, 'a');
@@ -31,8 +31,8 @@ static void test_one_rank(struct testresults *results) {
 
 
 void test_counter_main(struct testresults *results) {
-    test_add_one_char(results);
-    test_one_rank(results);
+    counter_test_add_one_char(results);
+    counter_test_one_rank(results);
 }
 
 #endif //TEST_COUNTER_C

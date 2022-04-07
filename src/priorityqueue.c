@@ -5,18 +5,30 @@
 
 #define INITCAP 10
 
+struct node {
+    void *elm;
+    int priority;
+};
+
 struct priorityqueue {
-    void **queue;
+    struct node **queue;
     int size;
     int capacity;
-    compare_t f;
 };
 
 /** Swaps the memory locations */
-static void swap(int *a, int *b) {
-  int temp = *b;
+static void swap(struct node **a, struct node **b) {
+  struct node *temp = *b;
   *b = *a;
   *a = temp;
+}
+
+/** Returns 1 if the first argument is higher priority than the second 
+ * argument and 0 otherwise */
+static bool compare(struct node *a, struct node *b) {
+    if (a == NULL) return false;
+    else if (b == NULL) return true;
+    return a->priority < b->priority;
 }
 
 /** Clears the memory allocated for the queue to prevent dirty memory issues */
@@ -27,7 +39,7 @@ static void clear_queue(struct priorityqueue *pq, int begin, int end) {
 /** Doubles the capacity of the priority queue */
 static void resize(struct priorityqueue *pq) {
     pq->capacity*=2;
-    realloc(pq->queue, sizeof(void *) * pq->capacity);
+    pq->queue = realloc(pq->queue, sizeof(struct node *) * pq->capacity);
     clear_queue(pq, pq->size, pq->capacity);
 }
 
@@ -37,8 +49,8 @@ static void heapify(struct priorityqueue *pq, int i) {
     int largest = i;
     int l = 2 * i + 1;
     int r = 2 * i + 2;
-    if (l < pq->size && pq->f(pq->queue[l], pq->queue[largest])) largest = l;
-    if (r < pq->size && pq->f(pq->queue[r], pq->queue[largest])) largest = r;
+    if (l < pq->size && compare(pq->queue[l], pq->queue[largest])) largest = l;
+    if (r < pq->size && compare(pq->queue[r], pq->queue[largest])) largest = r;
 
     // Swap and continue heapifying if root is not largest
     if (largest != i) {
@@ -47,32 +59,41 @@ static void heapify(struct priorityqueue *pq, int i) {
     }
 }
 
-void priorityqueue_init(struct priorityqueue *pq, compare_t f) {
+void priorityqueue_init(struct priorityqueue *pq) {
     pq->queue = malloc(sizeof(void *) * INITCAP);
     pq->size = 0;
     pq->capacity = INITCAP;
-    pq->f = f;
     clear_queue(pq, pq->size, pq->capacity - pq->size);
 }
 
 void priorityqueue_free(struct priorityqueue *pq) {
+    for (int i = 0; i < pq->size; i++) {
+        free(pq->queue[i]);
+    }
     free(pq->queue);
 }
 
 void priorityqueue_add(struct priorityqueue *pq, void *elm, int priority) {
     if (pq->size == pq->capacity) resize(pq);
-    pq->queue[++pq->size] = elm;
+    struct node *newelm = malloc(sizeof(struct node));
+    newelm->elm = elm;
+    newelm->priority = priority;
+    pq->queue[pq->size++] = newelm;
     for (int i = pq->size / 2 - 1; i >= 0; i--) {
       heapify(pq, i);
     }
 }
 
 void *priorityqueue_get(struct priorityqueue *pq) {
-    void *result = pq->queue[0];
+    struct node *result = pq->queue[0];
     pq->queue[0] = NULL;
     for (int i = pq->size / 2 - 1; i >= 0; i--) {
         heapify(pq, i);
     }
+    if (result == NULL) return NULL;
+    void *elm = result->elm;
+    free(result);
+    return elm;
 }
 
 void *priorityqueue_peek(struct priorityqueue *pq) {

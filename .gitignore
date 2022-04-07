@@ -5,3 +5,6 @@ build/
 # Executables
 main
 test.out
+
+# VSCode
+.vscode/

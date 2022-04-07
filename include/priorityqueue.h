@@ -7,14 +7,9 @@
 /** The data structure for the priority queue */
 struct priorityqueue;
 
-/** Type definition of a compare function, which returns 1 if the
- * first argument is higher priority than the second argument and 
- * 0 otherwise */
-typedef bool (*compare_t)(void *,void *);
-
 
 /** Initializes the priority queue with compare function f */
-void priorityqueue_init(struct priorityqueue *pq, compare_t f);
+void priorityqueue_init(struct priorityqueue *pq);
 
 /** Frees the priority queue in memory */
 void priorityqueue_free(struct priorityqueue *pq);
