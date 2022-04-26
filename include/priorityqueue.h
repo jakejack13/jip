@@ -30,4 +30,8 @@ void *priorityqueue_peek(struct priorityqueue *pq);
 
 int priorityqueue_length(struct priorityqueue *pq);
 
+#ifdef DEBUG
+void print_queue(struct priorityqueue *pq);
+#endif
+
 #endif //PRIORITYQUEUE_H

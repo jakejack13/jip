@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -g -Wall # Flag to pass to gcc
-CPPFLAGS = -I./include -O # Flag to pass to the C preprocessor
+CPPFLAGS = -I./include -Og -D DEBUG # Flag to pass to the C preprocessor
 
 all: main
 main: build/counter.o build/priorityqueue.o build/huffman.o build/compress.o build/main.o

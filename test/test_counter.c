@@ -8,15 +8,14 @@
 
 
 static void counter_test_add_one_char(struct testresults *results) {
-    struct counter *c = malloc(sizeof(struct counter));
-    counter_init(c);
-    counter_add(c, 'a');
-    unsigned int result = counter_get(c, 'a');
+    struct counter c;
+    counter_init(&c);
+    counter_add(&c, 'a');
+    unsigned int result = counter_get(&c, 'a');
     assert(1, result, "test_counter, test_add_one_char, counter_get", results);
-    result = counter_get(c, 'b');
+    result = counter_get(&c, 'b');
     assert(0, result, "test_counter, test_add_one_char, counter_get", results);
-    counter_free(c);
-    free(c);
+    counter_free(&c);
 }
 
 

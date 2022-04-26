@@ -7,43 +7,41 @@
 #include "priorityqueue.h"
 
 
+#define SIZE 10
+
+
 static void priorityqueue_test_add_one_char(struct testresults *results) {
-    struct priorityqueue *pq = malloc(sizeof(struct priorityqueue));
-    priorityqueue_init(pq);
+    struct priorityqueue pq;
+    priorityqueue_init(&pq);
     char a = 'a';
-    priorityqueue_add(pq, &a, 1);
-    char *result = priorityqueue_get(pq);
+    priorityqueue_add(&pq, &a, 1);
+    char *result = priorityqueue_get(&pq);
     #pragma GCC diagnostic ignored "-Wpointer-to-int-cast"
     assert((int) &a, (int) result, "test_priorityqueue, priorityqueue_test_add_one_char, priorityqueue_get", results);
-    result = priorityqueue_get(pq);
+    result = priorityqueue_get(&pq);
     #pragma GCC diagnostic ignored "-Wpointer-to-int-cast"
     assert(0, (int) result, "test_priorityqueue, priorityqueue_test_add_one_char, priorityqueue_get", results);
-    priorityqueue_free(pq);
-    free(pq);
+    priorityqueue_free(&pq);
 }
 
 static void priorityqueue_test_add_many_int_forward(struct testresults *results) {
-    #define SIZE 100
-    struct priorityqueue *pq = malloc(sizeof(struct priorityqueue));
-    priorityqueue_init(pq);
+    struct priorityqueue pq;
+    priorityqueue_init(&pq);
     int arr[SIZE];
     for (int i = 0; i < SIZE; i++) arr[i] = i;
-    for (int i = 0; i < SIZE; i++) priorityqueue_add(pq, arr+i, i);
-    for (int i = 0; i < SIZE; i++) assert((int) i, (int) *((int *)priorityqueue_get(pq)), "test_priorityqueue, priorityqueue_test_add_many_int, priorityqueue_get", results);
-    priorityqueue_free(pq);
-    free(pq);
+    for (int i = 0; i < SIZE; i++) priorityqueue_add(&pq, &arr[i], i);
+    for (int i = 0; i < SIZE; i++) assert((int) i, (int) *((int *)priorityqueue_get(&pq)), "test_priorityqueue, priorityqueue_test_add_many_int_forward, priorityqueue_get", results);
+    priorityqueue_free(&pq);
 }
 
 static void priorityqueue_test_add_many_int_backward(struct testresults *results) {
-    #define SIZE 100
-    struct priorityqueue *pq = malloc(sizeof(struct priorityqueue));
-    priorityqueue_init(pq);
+    struct priorityqueue pq;
+    priorityqueue_init(&pq);
     int arr[SIZE];
     for (int i = 0; i < SIZE; i++) arr[i] = i;
-    for (int i = SIZE-1; i >= 0; i--) priorityqueue_add(pq, arr+i, i);
-    for (int i = 0; i < SIZE; i++) assert((int) i, (int) *((int *)priorityqueue_get(pq)), "test_priorityqueue, priorityqueue_test_add_many_int, priorityqueue_get", results);
-    priorityqueue_free(pq);
-    free(pq);
+    for (int i = SIZE-1; i >= 0; i--) priorityqueue_add(&pq, &arr[i], i);
+    for (int i = 0; i < SIZE; i++) assert((int) i, (int) *((int *)priorityqueue_get(&pq)), "test_priorityqueue, priorityqueue_test_add_many_int_backward, priorityqueue_get", results);
+    priorityqueue_free(&pq);
 }
 
 
