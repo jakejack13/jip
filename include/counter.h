@@ -1,3 +1,8 @@
+/** counter.h
+ * Counting data structure used to count characters found in files.
+ * Implemented using hash tables, used for Huffman encoding.
+ */
+
 #ifndef COUNTER_H
 #define COUNTER_H
 
@@ -6,7 +11,7 @@
 
 /** The data structure for counting characters */
 struct counter {
-    unsigned int counts[NUMCHARS];
+    unsigned int *counts;
 };
 
 /** Intitializes the counter */

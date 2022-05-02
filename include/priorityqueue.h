@@ -1,3 +1,8 @@
+/** priorityqueue.h
+ * Priority queue datastructure used in creating nodes for the Huffman encoding tree.
+ * Implemented using binary heap
+ */
+
 #ifndef PRIORITYQUEUE_H
 #define PRIORITYQUEUE_H
 
