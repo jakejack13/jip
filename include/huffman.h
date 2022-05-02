@@ -6,6 +6,7 @@
 #define HUFFMAN_H
 
 #include <stdlib.h>
+#include <stdio.h>
 
 typedef struct huffman_node huffman_t;
 
@@ -21,8 +22,17 @@ void huffman_add_left(huffman_t *root, huffman_t *left);
 /** Adds a new right Huffman node to the root node */
 void huffman_add_right(huffman_t *root, huffman_t *right);
 
+/** Returns the frequency of the character represented by the given
+ * Huffman node */
 int huffman_get_frequency(huffman_t *h);
 
 /** Returns the Huffman code for the character */
-int huffman_get_code(huffman_t *h, char c);
+unsigned int huffman_get_code(huffman_t *h, char c);
+
+/** Loads a Huffman tree from the specified file */
+huffman_t *huffman_load_from_file(FILE *input);
+
+/** Saves the given Huffman tree to the specified file */
+void huffman_save_to_file(huffman_t *h, FILE *output);
+
 #endif //HUFFMAN_H

@@ -1,7 +1,5 @@
 #ifndef TEST_COUNTER_C
 #define TEST_COUNTER_C
-#include <stdlib.h>
-#include <stdio.h>
 #include "utils.c"
 
 #include "counter.h"

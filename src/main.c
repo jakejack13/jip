@@ -5,6 +5,7 @@
 
 #define USAGE "usage: jip -c/-d <origin> <destination>\n"
 
+/** The main entrypoint for the program */
 int main(int argc, char *argv[]) {
     if (argc < 4) {
         printf("jip: too few arguments\n");
@@ -32,4 +33,6 @@ int main(int argc, char *argv[]) {
 
     fclose(input);
     fclose(output);
+
+    return 0;
 }

@@ -28,6 +28,8 @@ void compress(FILE *input, FILE *output) {
         huffman_t *right = priorityqueue_get(pq);
         int new_frequency = huffman_get_frequency(left) + huffman_get_frequency(right);
         huffman_t *internal = huffman_init(-1, new_frequency);
+        huffman_add_left(internal, left);
+        huffman_add_right(internal, right);
         priorityqueue_add(pq, internal, new_frequency);
     }
     huffman_t *root = priorityqueue_get(pq);
@@ -37,9 +39,7 @@ void compress(FILE *input, FILE *output) {
     for (;;) {
         next = fgetc(input);
         if (next == EOF) break;
-        printf("char: %c, ",next);
         int code = huffman_get_code(root, next);
-        printf("code: %d\n", code);
         fputc(code, output);
     }
 

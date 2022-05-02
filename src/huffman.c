@@ -38,15 +38,23 @@ int huffman_get_frequency(huffman_t *h) {
     return h->frequency;
 }
 
-int huffman_get_code(struct huffman_node *h, char c) {
+unsigned int huffman_get_code(struct huffman_node *h, char c) {
     if (h == NULL) return -1;
     else if (h->left == NULL && h->right == NULL) {
         if (h->c == c) return 0;
         return -1;
     }
-    int result = huffman_get_code(h->left, c);
+    unsigned int result = huffman_get_code(h->left, c);
     if (result != -1) return result << 1; // if result found on left, add 0 to encoding
     result = huffman_get_code(h->right, c);
     if (result != -1) return (result << 1) + 1; // if result found on right, add 1 to encoding
     return -1;
+}
+
+huffman_t *huffman_load_from_file(FILE *input) {
+
+}
+
+void huffman_save_to_file(huffman_t *h, FILE *output) {
+
 }
