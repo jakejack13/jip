@@ -3,7 +3,6 @@
 
 #include "counter.h"
 
-
 void counter_init(struct counter *c) {
     c->counts = malloc(sizeof(int) * NUMCHARS);
     for (int i = 0; i < NUMCHARS; i++) c->counts[i] = 0;
