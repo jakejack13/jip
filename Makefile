@@ -3,8 +3,8 @@ CFLAGS = -g -Wall # Flag to pass to gcc
 CPPFLAGS = -I./include -Og -D DEBUG # Flag to pass to the C preprocessor
 
 all: main
-main: build/counter.o build/priorityqueue.o build/huffman.o build/compress.o build/biginteger.o build/main.o
-	$(CC) $(CFLAGS) build/main.o build/counter.o build/priorityqueue.o build/huffman.o build/compress.o build/biginteger.o -o jip
+main: build/main.o build/counter.o build/priorityqueue.o build/huffman.o build/compress.o build/bitfile.o
+	$(CC) $(CFLAGS) build/main.o build/counter.o build/priorityqueue.o build/huffman.o build/compress.o build/bitfile.o -o jip
 build/main.o: src/main.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c src/main.c -o build/main.o
 build/counter.o: include/counter.h src/counter.c
@@ -15,8 +15,8 @@ build/huffman.o: include/huffman.h src/huffman.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c src/huffman.c -o build/huffman.o
 build/compress.o: include/compress.h src/compress.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c src/compress.c -o build/compress.o
-build/biginteger.o: include/biginteger.h src/biginteger.c
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c src/biginteger.c -o build/biginteger.o
+build/bitfile.o: include/bitfile.h src/bitfile.c
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c src/bitfile.c -o build/bitfile.o
 
 test: buildtest
 	./test.out

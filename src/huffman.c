@@ -51,10 +51,10 @@ unsigned int huffman_get_code(struct huffman_node *h, char c) {
     return -1;
 }
 
-huffman_t *huffman_load_from_file(FILE *input) {
-
+void huffman_load_from_file(huffman_t *h, FILE *input) {
+    #warning "TODO"
 }
 
 void huffman_save_to_file(huffman_t *h, FILE *output) {
-
+    #warning "TODO"
 }
