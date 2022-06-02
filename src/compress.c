@@ -1,10 +1,12 @@
+#include <math.h>
+
 #include "counter.h"
 #include "priorityqueue.h"
 #include "huffman.h"
 
 #include "compress.h"
 
-void compress(FILE *input, FILE *output) {
+void compress(FILE *input, BITFILE *output) {
     struct counter c;
     counter_init(&c);
     char next = 'a';
@@ -35,19 +37,21 @@ void compress(FILE *input, FILE *output) {
     huffman_t *root = priorityqueue_get(&pq);
 
     rewind(input);
+    huffman_save_to_file(root, output);
     next = 'a';
     for (;;) {
         next = fgetc(input);
         if (next == EOF) break;
         int code = huffman_get_code(root, next);
-        fputc(code, output);
+        for (int i = (int) log2(code) + 1; i >= 0; i--) bitfile_putc((code >> i) & 1, output);
     }
+    bitfile_sync(output);
 
     counter_free(&c);
     priorityqueue_free(&pq);
     huffman_free(root);
 }
 
-void decompress(FILE *input, FILE *output) {
+void decompress(BITFILE *input, FILE *output) {
 
 }

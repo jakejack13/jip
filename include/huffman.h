@@ -32,9 +32,9 @@ int huffman_get_frequency(huffman_t *h);
 unsigned int huffman_get_code(huffman_t *h, char c);
 
 /** Loads a Huffman tree from the specified file */
-void huffman_load_from_file(huffman_t *h, FILE *input);
+void huffman_load_from_file(huffman_t *h, BITFILE *input);
 
 /** Saves the given Huffman tree to the specified file */
-void huffman_save_to_file(huffman_t *h, FILE *output);
+void huffman_save_to_file(huffman_t *h, BITFILE *output);
 
 #endif //HUFFMAN_H

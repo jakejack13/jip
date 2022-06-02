@@ -22,6 +22,9 @@ char bitfile_getc(BITFILE *file);
 /** Puts a new bit into the file */
 void bitfile_putc(char c, BITFILE *file);
 
+/** Syncs the bitfile with the file below */
+void bitfile_sync(BITFILE *file);
+
 /** Rewinds the file back to the start */
 void bitfile_rewind(BITFILE *file);
 

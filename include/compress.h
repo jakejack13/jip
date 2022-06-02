@@ -3,10 +3,12 @@
 
 #include <stdio.h>
 
+#include "bitfile.h"
+
 /** Compress the input file and store the information in the output file */
-void compress(FILE *input, FILE *output);
+void compress(FILE *input, BITFILE *output);
 
 /** Decompress the output file and store the information in the output file */
-void decompress(FILE *input, FILE *output);
+void decompress(BITFILE *input, FILE *output);
 
 #endif //COMPRESS_H

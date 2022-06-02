@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "compress.h"
+#include "bitfile.h"
 
 #define USAGE "usage: jip -c/-d <origin> <destination>\n"
 
@@ -22,9 +23,13 @@ int main(int argc, char *argv[]) {
     }
 
     if (strcmp(argv[1], "-c") == 0) {
-        compress(input, output);
+        BITFILE *output_bit = bitfile_open(output);
+        compress(input, output_bit);
+        bitfile_close(output_bit);
     } else if (strcmp(argv[1], "-d") == 0) {
-        decompress(input, output);
+        BITFILE *input_bit = bitfile_open(input);
+        decompress(input_bit, output);
+        bitfile_close(input_bit);
     } else {
         printf("jip: incorrect mode\n");
         printf(USAGE);
