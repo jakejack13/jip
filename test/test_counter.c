@@ -1,24 +1,20 @@
-#ifndef TEST_COUNTER_C
-#define TEST_COUNTER_C
-#include "utils.c"
+#include "utils.h"
 
 #include "counter.h"
 
 
-static void counter_test_add_one_char(struct testresults *results) {
+static void counter_test_add_one_char() {
     struct counter c;
     counter_init(&c);
     counter_add(&c, 'a');
     unsigned int result = counter_get(&c, 'a');
-    assert(1, result, "test_counter, test_add_one_char, counter_get", results);
+    assert_equals_int(1, result, "test_counter, test_add_one_char, counter_get");
     result = counter_get(&c, 'b');
-    assert(0, result, "test_counter, test_add_one_char, counter_get", results);
+    assert_equals_int(0, result, "test_counter, test_add_one_char, counter_get");
     counter_free(&c);
 }
 
 
-void test_counter_main(struct testresults *results) {
-    counter_test_add_one_char(results);
+void test_counter() {
+    counter_test_add_one_char();
 }
-
-#endif //TEST_COUNTER_C

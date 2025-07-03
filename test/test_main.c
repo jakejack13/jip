@@ -1,18 +1,24 @@
 #include <stdio.h>
 
-#include "utils.c"
+#include "utils.h"
 
-#include "test_counter.c"
-#include "test_priorityqueue.c"
+// Declare test functions
+void test_counter();
+void test_priorityqueue();
+void test_huffman();
+void test_compress();
+void test_bitfile();
 
-
-static struct testresults results;
+struct testresults results;
 
 int main() {
     printf("Begin tests\n");
 
-    test_counter_main(&results);
-    test_priorityqueue_main(&results);
+    test_counter();
+    test_priorityqueue();
+    test_huffman();
+    test_compress();
+    // test_bitfile();
     
 
     printf("End tests\n");

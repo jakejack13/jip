@@ -5,8 +5,10 @@
 
 #include "bitfile.h"
 
+#define EOF_CHAR (NUMCHARS - 1)
+
 /** Compress the input file and store the information in the output file */
-void compress(FILE *input, BITFILE *output);
+int compress(FILE *input, BITFILE *output);
 
 /** Decompress the output file and store the information in the output file */
 void decompress(BITFILE *input, FILE *output);

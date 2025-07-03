@@ -23,11 +23,11 @@ int main(int argc, char *argv[]) {
     }
 
     if (strcmp(argv[1], "-c") == 0) {
-        BITFILE *output_bit = bitfile_open(output);
+        BITFILE *output_bit = bitfile_open(output, 0);
         compress(input, output_bit);
         bitfile_close(output_bit);
     } else if (strcmp(argv[1], "-d") == 0) {
-        BITFILE *input_bit = bitfile_open(input);
+        BITFILE *input_bit = bitfile_open(input, 0);
         decompress(input_bit, output);
         bitfile_close(input_bit);
     } else {

@@ -12,11 +12,11 @@ void counter_free(struct counter *c) {
     free(c->counts);
 }
 
-void counter_add(struct counter *c, char ch) {
-    c->counts[(int) ch]++;
+void counter_add(struct counter *c, int ch) {
+    c->counts[ch]++;
 }
 
-unsigned int counter_get(struct counter *c, char ch) {
+unsigned int counter_get(struct counter *c, int ch) {
     return c->counts[(int) ch];
 }
 

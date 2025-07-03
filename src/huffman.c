@@ -1,13 +1,6 @@
 #include "huffman.h"
 
-struct huffman_node {
-    char c;
-    int frequency;
-    struct huffman_node *left;
-    struct huffman_node *right;
-};
-
-huffman_t *huffman_init(char c, int frequency) {
+huffman_t *huffman_init(int c, int frequency) {
     huffman_t *h = malloc(sizeof(struct huffman_node));
     h->c = c;
     h->frequency = frequency;
@@ -38,32 +31,96 @@ int huffman_get_frequency(huffman_t *h) {
     return h->frequency;
 }
 
-static unsigned int huffman_get_code_helper(struct huffman_node *h, char c, unsigned int code, int depth) {
+static void huffman_assign_codes_recursive(huffman_t *h, unsigned int code, int length) {
+    if (h == NULL) return;
+
+    if (h->left == NULL && h->right == NULL) {
+        h->code = code;
+        h->length = length;
+        return;
+    }
+
+    huffman_assign_codes_recursive(h->left, code << 1, length + 1);
+    huffman_assign_codes_recursive(h->right, (code << 1) | 1, length + 1);
+}
+
+unsigned int huffman_get_code(struct huffman_node *h, int c) {
     if (h == NULL) return -1;
     if (h->left == NULL && h->right == NULL) {
         if (h->c == c) {
-            return code;
+            return h->code;
         }
         return -1;
     }
 
-    unsigned int result = huffman_get_code_helper(h->left, c, code, depth + 1);
+    unsigned int result = huffman_get_code(h->left, c);
     if (result != -1) {
         return result;
     }
 
-    code |= (1 << depth);
-    return huffman_get_code_helper(h->right, c, code, depth + 1);
+    return huffman_get_code(h->right, c);
 }
 
-unsigned int huffman_get_code(struct huffman_node *h, char c) {
-    return huffman_get_code_helper(h, c, 0, 0);
+int huffman_get_code_length(huffman_t *h, int c) {
+    if (h == NULL) return -1;
+    if (h->left == NULL && h->right == NULL) {
+        if (h->c == c) {
+            return h->length;
+        }
+        return -1;
+    }
+
+    int result = huffman_get_code_length(h->left, c);
+    if (result != -1) {
+        return result;
+    }
+
+    return huffman_get_code_length(h->right, c);
 }
 
-void huffman_load_from_file(huffman_t *h, BITFILE *input) {
-    #warning "TODO"
+huffman_t *huffman_load_from_file(BITFILE *input) {
+    int bit = bitfile_getc(input);
+    if (bit == EOF) {
+        return NULL;
+    }
+    if (bit == 1) {
+        int c = 0;
+        for (int i = 7; i >= 0; i--) {
+            bit = bitfile_getc(input);
+            if (bit == EOF) return NULL; // Handle unexpected EOF
+            c = (c << 1) | bit;
+        }
+        return huffman_init(c, 0);
+    } else {
+        huffman_t *node = huffman_init(-1, 0);
+        node->left = huffman_load_from_file(input);
+        if (node->left == NULL) {
+            free(node);
+            return NULL;
+        }
+        node->right = huffman_load_from_file(input);
+        if (node->right == NULL) {
+            free(node->left);
+            free(node);
+            return NULL;
+        }
+        return node;
+    }
+}
+
+void huffman_assign_codes(huffman_t *h) {
+    huffman_assign_codes_recursive(h, 0, 0);
 }
 
 void huffman_save_to_file(huffman_t *h, BITFILE *output) {
-    #warning "TODO"
+    if (h->left == NULL && h->right == NULL) {
+        bitfile_putc(1, output);
+        for (int i = 7; i >= 0; i--) {
+            bitfile_putc((h->c >> i) & 1, output);
+        }
+    } else {
+        bitfile_putc(0, output);
+        huffman_save_to_file(h->left, output);
+        huffman_save_to_file(h->right, output);
+    }
 }

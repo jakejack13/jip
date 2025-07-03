@@ -10,20 +10,30 @@
 /** A bit readable and writeable file */
 typedef struct bitfile BITFILE;
 
+struct bitfile {
+    FILE *below;
+    unsigned int bit;
+    char curr_byte;
+    int bits_in_last_byte;
+    long total_bits_read;
+    long total_bits_to_read;
+};
+
 /** Opens a new bitfile from the given file */
-BITFILE *bitfile_open(FILE *file);
+/** Opens a new bitfile from the given file */
+BITFILE *bitfile_open(FILE *file, int bits_in_last_byte);
 
 /** Closes the given bitfile */
 void bitfile_close(BITFILE *file);
 
 /** Gets the next bit from the file */
-char bitfile_getc(BITFILE *file);
+int bitfile_getc(BITFILE *file);
 
 /** Puts a new bit into the file */
 void bitfile_putc(char c, BITFILE *file);
 
 /** Syncs the bitfile with the file below */
-void bitfile_sync(BITFILE *file);
+int bitfile_sync(BITFILE *file);
 
 /** Rewinds the file back to the start */
 void bitfile_rewind(BITFILE *file);
