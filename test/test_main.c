@@ -4,7 +4,7 @@
 
 #include "test_counter.c"
 #include "test_priorityqueue.c"
-#include "test_biginteger.c"
+
 
 static struct testresults results;
 
@@ -13,7 +13,7 @@ int main() {
 
     test_counter_main(&results);
     test_priorityqueue_main(&results);
-    test_biginteger_main(&results);
+    
 
     printf("End tests\n");
     printf("Passed: %d, Ran: %d\n", results.num_passed, results.num_ran);

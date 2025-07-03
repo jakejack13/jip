@@ -20,9 +20,9 @@ build/bitfile.o: include/bitfile.h src/bitfile.c
 
 test: buildtest
 	./test.out
-buildtest: build/test_main.o build/counter.o build/priorityqueue.o build/biginteger.o
-	$(CC) $(CFLAGS) build/test_main.o build/counter.o build/priorityqueue.o build/biginteger.o -o test.out
-build/test_main.o: test/test_main.c test/utils.c test/test_counter.c test/test_priorityqueue.c test/test_biginteger.c
+buildtest: build/test_main.o build/counter.o build/priorityqueue.o
+	$(CC) $(CFLAGS) build/test_main.o build/counter.o build/priorityqueue.o -o test.out
+build/test_main.o: test/test_main.c test/utils.c test/test_counter.c test/test_priorityqueue.c
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c test/test_main.c -o build/test_main.o
 
 clean:

@@ -43,7 +43,10 @@ void compress(FILE *input, BITFILE *output) {
         next = fgetc(input);
         if (next == EOF) break;
         int code = huffman_get_code(root, next);
-        for (int i = (int) log2(code) + 1; i >= 0; i--) bitfile_putc((code >> i) & 1, output);
+        int length = (int) log2(huffman_get_code(root, next)) + 1;
+        for (int i = length - 1; i >= 0; i--) {
+            bitfile_putc((code >> i) & 1, output);
+        }
     }
     bitfile_sync(output);
 

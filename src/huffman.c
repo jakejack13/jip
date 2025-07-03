@@ -38,17 +38,26 @@ int huffman_get_frequency(huffman_t *h) {
     return h->frequency;
 }
 
-unsigned int huffman_get_code(struct huffman_node *h, char c) {
+static unsigned int huffman_get_code_helper(struct huffman_node *h, char c, unsigned int code, int depth) {
     if (h == NULL) return -1;
-    else if (h->left == NULL && h->right == NULL) {
-        if (h->c == c) return 0;
+    if (h->left == NULL && h->right == NULL) {
+        if (h->c == c) {
+            return code;
+        }
         return -1;
     }
-    unsigned int result = huffman_get_code(h->left, c);
-    if (result != -1) return result << 1; // if result found on left, add 0 to encoding
-    result = huffman_get_code(h->right, c);
-    if (result != -1) return (result << 1) + 1; // if result found on right, add 1 to encoding
-    return -1;
+
+    unsigned int result = huffman_get_code_helper(h->left, c, code, depth + 1);
+    if (result != -1) {
+        return result;
+    }
+
+    code |= (1 << depth);
+    return huffman_get_code_helper(h->right, c, code, depth + 1);
+}
+
+unsigned int huffman_get_code(struct huffman_node *h, char c) {
+    return huffman_get_code_helper(h, c, 0, 0);
 }
 
 void huffman_load_from_file(huffman_t *h, BITFILE *input) {
