@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -g -Wall # Flag to pass to gcc
+CFLAGS = -g -Wall -fprofile-arcs -ftest-coverage # Flag to pass to gcc
 CPPFLAGS = -I./include -I./test -Og -D DEBUG # Flag to pass to the C preprocessor
 
 all: main
@@ -39,3 +39,8 @@ build/test_bitfile.o: test/test_bitfile.c
 
 clean:
 	rm -rf build/* jip test.out
+
+coverage:
+	$(MAKE) clean
+	$(MAKE) CFLAGS='-g -Wall --coverage' test
+	gcov -o build/ src/*
