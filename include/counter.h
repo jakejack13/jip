@@ -8,6 +8,7 @@
 
 /** The number of characters */
 #define NUMCHARS 257
+#define EOF_CHAR 256
 
 /** The data structure for counting characters */
 struct counter {

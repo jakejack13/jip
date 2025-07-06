@@ -6,6 +6,19 @@
 
 
 
+static void bitfile_update_read_length(BITFILE *file) {
+    long current_pos = ftell(file->below);
+    fseek(file->below, 0, SEEK_END);
+    long file_size = ftell(file->below);
+    fseek(file->below, current_pos, SEEK_SET);
+
+    if (file_size == 0) {
+        file->total_bits_to_read = 0;
+    } else {
+        file->total_bits_to_read = (file_size - 1) * 8 + file->bits_in_last_byte;
+    }
+}
+
 BITFILE *bitfile_open(FILE *file, int bits_in_last_byte) {
     BITFILE *bitfile = malloc(sizeof(struct bitfile));
     bitfile->below = file;
@@ -14,24 +27,7 @@ BITFILE *bitfile_open(FILE *file, int bits_in_last_byte) {
     bitfile->bits_in_last_byte = bits_in_last_byte; // Initialize new field
     bitfile->total_bits_read = 0;
 
-    // Calculate total_bits_to_read
-    if (bits_in_last_byte == 0) { // Writing mode
-        bitfile->total_bits_to_read = LONG_MAX; // Effectively infinite
-    } else { // Reading mode
-        long current_pos = ftell(file);
-        fseek(file, 0, SEEK_END);
-        long file_size = ftell(file);
-        fseek(file, current_pos, SEEK_SET);
-
-        // Account for the byte already read (bits_in_last_byte)
-        if (file_size > 1) {
-            bitfile->total_bits_to_read = (file_size - 1) * 8 + bits_in_last_byte;
-        } else if (file_size == 1 && bits_in_last_byte > 0) {
-            bitfile->total_bits_to_read = bits_in_last_byte;
-        } else {
-            bitfile->total_bits_to_read = 0;
-        }
-    }
+    bitfile_update_read_length(bitfile);
 
     return bitfile;
 }
@@ -85,4 +81,6 @@ void bitfile_rewind(BITFILE *file) {
     rewind(file->below);
     file->bit = 0;
     file->curr_byte = 0;
+    file->total_bits_read = 0;
+    bitfile_update_read_length(file);
 }

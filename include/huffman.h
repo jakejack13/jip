@@ -10,6 +10,8 @@
 
 #include "bitfile.h"
 
+#define EOF_CHAR 256
+
 typedef struct huffman_node huffman_t;
 
 struct huffman_node {

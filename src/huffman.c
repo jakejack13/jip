@@ -84,14 +84,25 @@ huffman_t *huffman_load_from_file(BITFILE *input) {
         return NULL;
     }
     if (bit == 1) {
-        int c = 0;
-        for (int i = 7; i >= 0; i--) {
-            bit = bitfile_getc(input);
-            if (bit == EOF) return NULL; // Handle unexpected EOF
-            c = (c << 1) | bit;
+        // This is a leaf node
+        int is_eof_char = bitfile_getc(input);
+        if (is_eof_char == EOF) return NULL;
+
+        if (is_eof_char == 1) {
+            // It's the EOF_CHAR
+            return huffman_init(EOF_CHAR, 0);
+        } else {
+            // It's a regular character
+            int c = 0;
+            for (int i = 7; i >= 0; i--) { // Read 8 bits for the character
+                bit = bitfile_getc(input);
+                if (bit == EOF) return NULL; // Handle unexpected EOF
+                c = (c << 1) | bit;
+            }
+            return huffman_init(c, 0);
         }
-        return huffman_init(c, 0);
     } else {
+        // This is an internal node
         huffman_t *node = huffman_init(-1, 0);
         node->left = huffman_load_from_file(input);
         if (node->left == NULL) {
@@ -100,7 +111,7 @@ huffman_t *huffman_load_from_file(BITFILE *input) {
         }
         node->right = huffman_load_from_file(input);
         if (node->right == NULL) {
-            free(node->left);
+            huffman_free(node->left);
             free(node);
             return NULL;
         }
@@ -114,13 +125,19 @@ void huffman_assign_codes(huffman_t *h) {
 
 void huffman_save_to_file(huffman_t *h, BITFILE *output) {
     if (h->left == NULL && h->right == NULL) {
-        bitfile_putc(1, output);
-        for (int i = 7; i >= 0; i--) {
+        bitfile_putc(1, output); // Indicate leaf node
+        if (h->c == EOF_CHAR) {
+            bitfile_putc(1, output); // Indicate EOF_CHAR
+        } else {
+            bitfile_putc(0, output); // Indicate regular character
+            for (int i = 7; i >= 0; i--) {
             bitfile_putc((h->c >> i) & 1, output);
         }
+        }
     } else {
-        bitfile_putc(0, output);
+        bitfile_putc(0, output); // Indicate internal node
         huffman_save_to_file(h->left, output);
         huffman_save_to_file(h->right, output);
     }
 }
+

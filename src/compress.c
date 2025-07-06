@@ -11,12 +11,16 @@ int compress(FILE *input, BITFILE *output) {
     struct counter c;
     counter_init(&c);
     int next_char;
+    int is_empty = 1;
     for (;;) {
         next_char = fgetc(input);
         if (next_char == EOF) break;
+        is_empty = 0;
         counter_add(&c, next_char);
     }
-    counter_add(&c, EOF_CHAR); // Add EOF character
+    if (!is_empty) {
+        counter_add(&c, EOF_CHAR); // Add EOF character
+    }
 
     int arr[NUMCHARS];
     counter_fill(&c, arr);
@@ -38,6 +42,14 @@ int compress(FILE *input, BITFILE *output) {
         priorityqueue_add(&pq, internal, new_frequency);
     }
     huffman_t *root = priorityqueue_get(&pq);
+
+    if (root == NULL) {
+        // Handle empty file case
+        fputc(0, output->below); // bits_in_last_byte
+        counter_free(&c);
+        priorityqueue_free(&pq);
+        return 0;
+    }
 
     huffman_assign_codes(root); // Assign codes after tree is built
 

@@ -17,12 +17,15 @@ void test_compress_decompress() {
     FILE *compressed_file = fopen("test_compressed.bin", "wb+");
     BITFILE *output_bitfile = bitfile_open(compressed_file, 0);
     
+    // Call compress function
+    compress(input_file, output_bitfile);
     bitfile_close(output_bitfile);
     fclose(input_file);
 
     // Decompress the file
-    fseek(compressed_file, 0, SEEK_SET);
-    BITFILE *input_bitfile = bitfile_open(compressed_file, 0);
+    rewind(compressed_file);
+    int bits_in_last_byte_read = fgetc(compressed_file);
+    BITFILE *input_bitfile = bitfile_open(compressed_file, bits_in_last_byte_read);
     FILE *decompressed_file = fopen("test_decompressed.txt", "w+");
     decompress(input_bitfile, decompressed_file);
     bitfile_close(input_bitfile);
@@ -54,6 +57,45 @@ void test_compress_decompress() {
     remove("test_decompressed.txt");
 }
 
+void test_compress_empty_file() {
+    // Create an empty input file
+    FILE *input_file = fopen("test_empty_input.txt", "w+");
+    fclose(input_file);
+
+    // Compress the empty file
+    input_file = fopen("test_empty_input.txt", "r");
+    FILE *compressed_file = fopen("test_empty_compressed.bin", "wb+");
+    BITFILE *output_bitfile = bitfile_open(compressed_file, 0);
+    int bits_in_last_byte = compress(input_file, output_bitfile);
+    bitfile_close(output_bitfile);
+    fclose(input_file);
+
+    // Write bits_in_last_byte to the beginning of the compressed file
+    fseek(compressed_file, 0, SEEK_SET);
+    fputc(bits_in_last_byte, compressed_file);
+
+    // Decompress the empty file
+    rewind(compressed_file);
+    int bits_in_last_byte_read = fgetc(compressed_file);
+    BITFILE *input_bitfile = bitfile_open(compressed_file, bits_in_last_byte_read);
+    FILE *decompressed_file = fopen("test_empty_decompressed.txt", "w+");
+    decompress(input_bitfile, decompressed_file);
+    bitfile_close(input_bitfile);
+    fclose(decompressed_file);
+
+    // Verify that the decompressed file is empty
+    decompressed_file = fopen("test_empty_decompressed.txt", "r");
+    fseek(decompressed_file, 0, SEEK_END);
+    long file_size = ftell(decompressed_file);
+    assert_equals_int(0, file_size, "test_compress_empty_file: decompressed file should be empty");
+    fclose(decompressed_file);
+
+    remove("test_empty_input.txt");
+    remove("test_empty_compressed.bin");
+    remove("test_empty_decompressed.txt");
+}
+
 void test_compress() {
     test_compress_decompress();
+    test_compress_empty_file();
 }

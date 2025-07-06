@@ -32,4 +32,15 @@ extern struct testresults results;
         } \
     } while (0)
 
+#define assert_not_null(pointer, message) \
+    do { \
+        results.num_ran++; \
+        if ((pointer) != NULL) { \
+            results.num_passed++; \
+        } else { \
+            printf("FAIL: %s - Expected not NULL\n", message); \
+            fflush(stdout); \
+        } \
+    } while (0)
+
 #endif // UTILS_H

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -57,7 +58,7 @@ void test_huffman_save_load() {
     FILE *fp = fopen("test_huffman.bin", "wb+");
     BITFILE *bf = bitfile_open(fp, 0);
     huffman_save_to_file(root, bf);
-    bitfile_sync(bf);
+    bf->bits_in_last_byte = bitfile_sync(bf);
     bitfile_rewind(bf);
 
     huffman_t *loaded_root = huffman_load_from_file(bf);

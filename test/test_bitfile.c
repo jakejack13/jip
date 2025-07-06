@@ -5,6 +5,15 @@
 #include "bitfile.h"
 #include "utils.h"
 
+void test_bitfile_open_close() {
+    FILE *fp = fopen("test_bitfile_open_close.bin", "wb+");
+    BITFILE *bf = bitfile_open(fp, 0);
+    assert_not_null(bf, "bitfile_open_close: BITFILE should not be NULL");
+    bitfile_close(bf);
+    fclose(fp);
+    remove("test_bitfile_open_close.bin");
+}
+
 void test_bitfile_putc_getc() {
     FILE *fp = fopen("test_bitfile.bin", "wb+");
     BITFILE *bf = bitfile_open(fp, 0);
@@ -36,5 +45,6 @@ void test_bitfile_putc_getc() {
 }
 
 void test_bitfile() {
+    test_bitfile_open_close();
     test_bitfile_putc_getc();
 }
