@@ -1,11 +1,11 @@
+#include "compress.h"
+
 #include <math.h>
+#include <stdio.h>
 
 #include "counter.h"
-#include "priorityqueue.h"
 #include "huffman.h"
-
-#include "compress.h"
-#include <stdio.h>
+#include "priorityqueue.h"
 
 int compress(FILE *input, BITFILE *output) {
     struct counter c;
@@ -19,17 +19,17 @@ int compress(FILE *input, BITFILE *output) {
         counter_add(&c, next_char);
     }
     if (is_empty) {
-        fputc(0, output->below); // bits_in_last_byte
+        fputc(0, output->below);  // bits_in_last_byte
         fflush(output->below);
         counter_free(&c);
         return 0;
     }
 
-    counter_add(&c, EOF_CHAR); // Add EOF character
+    counter_add(&c, EOF_CHAR);  // Add EOF character
 
     int arr[NUMCHARS];
     counter_fill(&c, arr);
-    
+
     struct priorityqueue pq;
     priorityqueue_init(&pq);
     for (int i = 0; i < NUMCHARS; i++) {
@@ -40,7 +40,8 @@ int compress(FILE *input, BITFILE *output) {
     while (priorityqueue_length(&pq) > 1) {
         huffman_t *left = priorityqueue_get(&pq);
         huffman_t *right = priorityqueue_get(&pq);
-        int new_frequency = huffman_get_frequency(left) + huffman_get_frequency(right);
+        int new_frequency =
+            huffman_get_frequency(left) + huffman_get_frequency(right);
         huffman_t *internal = huffman_init(-1, new_frequency);
         huffman_add_left(internal, left);
         huffman_add_right(internal, right);
@@ -48,7 +49,7 @@ int compress(FILE *input, BITFILE *output) {
     }
     huffman_t *root = priorityqueue_get(&pq);
 
-    huffman_assign_codes(root); // Assign codes after tree is built
+    huffman_assign_codes(root);  // Assign codes after tree is built
 
     // Write a placeholder for bits_in_last_byte at the beginning
     fputc(0, output->below);
@@ -60,8 +61,7 @@ int compress(FILE *input, BITFILE *output) {
         if (next_char == EOF) break;
         unsigned int code = huffman_get_code(root, next_char);
         int length = huffman_get_code_length(root, next_char);
-        
-        
+
         for (int i = length - 1; i >= 0; i--) {
             bitfile_putc((code >> i) & 1, output);
         }
@@ -69,7 +69,7 @@ int compress(FILE *input, BITFILE *output) {
     // Write EOF character code
     unsigned int eof_code = huffman_get_code(root, EOF_CHAR);
     int eof_length = huffman_get_code_length(root, EOF_CHAR);
-    
+
     for (int i = eof_length - 1; i >= 0; i--) {
         bitfile_putc((eof_code >> i) & 1, output);
     }
@@ -111,12 +111,12 @@ void decompress(BITFILE *input, FILE *output) {
     }
 
     huffman_t *root = huffman_load_from_file(input);
-    if (root == NULL) return; // Handle error during tree loading
+    if (root == NULL) return;  // Handle error during tree loading
     huffman_t *curr = root;
     for (;;) {
         int bit = bitfile_getc(input);
         if (bit == EOF) {
-            break; // Check for EOF from bitfile_getc
+            break;  // Check for EOF from bitfile_getc
         }
 
         if (bit == 1) {
@@ -125,9 +125,9 @@ void decompress(BITFILE *input, FILE *output) {
             curr = curr->left;
         }
 
-        if (curr->left == NULL && curr->right == NULL) { // Leaf node
+        if (curr->left == NULL && curr->right == NULL) {  // Leaf node
             if (curr->c == EOF_CHAR) {
-                break; // Stop before writing EOF_CHAR
+                break;  // Stop before writing EOF_CHAR
             }
             fputc(curr->c, output);
             curr = root;

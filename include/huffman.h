@@ -5,8 +5,8 @@
 #ifndef HUFFMAN_H
 #define HUFFMAN_H
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "bitfile.h"
 
@@ -54,4 +54,4 @@ void huffman_save_to_file(huffman_t *h, BITFILE *output);
 /** Assigns Huffman codes to the nodes in the tree */
 void huffman_assign_codes(huffman_t *h);
 
-#endif //HUFFMAN_H
+#endif  // HUFFMAN_H

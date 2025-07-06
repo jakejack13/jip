@@ -31,4 +31,4 @@ unsigned int counter_get(struct counter *c, int ch);
  * corresponding to the character */
 void counter_fill(struct counter *c, int *arr);
 
-#endif //COUNTER_H
+#endif  // COUNTER_H

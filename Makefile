@@ -40,6 +40,12 @@ build/test_bitfile.o: test/test_bitfile.c
 clean:
 	rm -rf build/* jip test.out
 
+lint:
+	clang-format -Werror --dry-run src/*.c include/*.h
+
+format:
+	clang-format -i src/*.c include/*.h
+
 coverage:
 	$(MAKE) clean
 	$(MAKE) CFLAGS='-g -Wall --coverage' test

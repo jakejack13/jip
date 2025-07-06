@@ -38,4 +38,4 @@ int bitfile_sync(BITFILE *file);
 /** Rewinds the file back to the start */
 void bitfile_rewind(BITFILE *file);
 
-#endif //BITFILE_H
+#endif  // BITFILE_H

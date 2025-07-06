@@ -1,10 +1,8 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <limits.h> // For LONG_MAX
-
 #include "bitfile.h"
 
-
+#include <limits.h>  // For LONG_MAX
+#include <stdio.h>
+#include <stdlib.h>
 
 static void bitfile_update_read_length(BITFILE *file) {
     long current_pos = ftell(file->below);
@@ -15,7 +13,8 @@ static void bitfile_update_read_length(BITFILE *file) {
     if (file_size == 0) {
         file->total_bits_to_read = 0;
     } else {
-        file->total_bits_to_read = (file_size - 1) * 8 + file->bits_in_last_byte;
+        file->total_bits_to_read =
+            (file_size - 1) * 8 + file->bits_in_last_byte;
     }
 }
 
@@ -23,8 +22,8 @@ BITFILE *bitfile_open(FILE *file, int bits_in_last_byte) {
     BITFILE *bitfile = malloc(sizeof(struct bitfile));
     bitfile->below = file;
     bitfile->bit = 0;
-    bitfile->curr_byte = 0; // Initialize curr_byte
-    bitfile->bits_in_last_byte = bits_in_last_byte; // Initialize new field
+    bitfile->curr_byte = 0;                          // Initialize curr_byte
+    bitfile->bits_in_last_byte = bits_in_last_byte;  // Initialize new field
     bitfile->total_bits_read = 0;
 
     bitfile_update_read_length(bitfile);
@@ -32,24 +31,22 @@ BITFILE *bitfile_open(FILE *file, int bits_in_last_byte) {
     return bitfile;
 }
 
-void bitfile_close(BITFILE *file) {
-    free(file);
-}
+void bitfile_close(BITFILE *file) { free(file); }
 
 int bitfile_getc(BITFILE *file) {
     if (file->total_bits_read >= file->total_bits_to_read) {
         return EOF;
     }
 
-    if(file->bit == 0) {
+    if (file->bit == 0) {
         int c = fgetc(file->below);
         if (c == EOF) {
-            return EOF; // Should not happen if total_bits_to_read is correct
+            return EOF;  // Should not happen if total_bits_to_read is correct
         }
         file->curr_byte = (char)c;
     }
     char result = (file->curr_byte >> (7 - file->bit)) & 1;
-    file->bit = (file->bit+1) % 8;
+    file->bit = (file->bit + 1) % 8;
     file->total_bits_read++;
     return result;
 }

@@ -1,8 +1,8 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-
 #include "priorityqueue.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define INITCAP 10
 
@@ -11,28 +11,29 @@
 #define RIGHT(x) (2 * (x) + 2)
 #define PARENT(x) ((x) / 2)
 
-
 struct node {
     void *elm;
     int priority;
 };
 
-/** Returns 1 if the first argument is higher priority than the second 
+/** Returns 1 if the first argument is higher priority than the second
  * argument and 0 otherwise */
 static bool compare(struct node *a, struct node *b) {
-    if (a == NULL) return false;
-    else if (b == NULL) return true;
+    if (a == NULL)
+        return false;
+    else if (b == NULL)
+        return true;
     return a->priority < b->priority;
 }
 
 /** Clears the memory allocated for the queue to prevent dirty memory issues */
 static void clear_queue(struct priorityqueue *pq, int begin, int end) {
-    memset(pq->queue+begin, 0, sizeof(void *) * (end-begin));
+    memset(pq->queue + begin, 0, sizeof(void *) * (end - begin));
 }
 
 /** Doubles the capacity of the priority queue */
 static void resize(struct priorityqueue *pq) {
-    pq->capacity*=2;
+    pq->capacity *= 2;
     pq->queue = realloc(pq->queue, sizeof(struct node *) * pq->capacity);
     clear_queue(pq, pq->size, pq->capacity);
 }
@@ -83,11 +84,11 @@ void priorityqueue_add(struct priorityqueue *pq, void *elm, int priority) {
     newelm->elm = elm;
     newelm->priority = priority;
     pq->queue[pq->size] = newelm;
-    
+
     int i = pq->size;
     pq->size++;
     void *tmp = NULL;
-    while(i > 0 && compare(pq->queue[i], pq->queue[PARENT(i)]) > 0) {
+    while (i > 0 && compare(pq->queue[i], pq->queue[PARENT(i)]) > 0) {
         tmp = pq->queue[i];
         pq->queue[i] = pq->queue[PARENT(i)];
         pq->queue[PARENT(i)] = tmp;
@@ -98,7 +99,7 @@ void priorityqueue_add(struct priorityqueue *pq, void *elm, int priority) {
 void *priorityqueue_get(struct priorityqueue *pq) {
     if (pq->size < 1) return NULL;
     struct node *result = pq->queue[0];
-    pq->queue[0] = pq->queue[pq->size-1];
+    pq->queue[0] = pq->queue[pq->size - 1];
     pq->size--;
     heapify(pq, 0);
     void *elm = result->elm;
@@ -106,13 +107,9 @@ void *priorityqueue_get(struct priorityqueue *pq) {
     return elm;
 }
 
-void *priorityqueue_peek(struct priorityqueue *pq) {
-    return pq->queue[0];
-}
+void *priorityqueue_peek(struct priorityqueue *pq) { return pq->queue[0]; }
 
-int priorityqueue_length(struct priorityqueue *pq) {
-    return pq->size;
-}
+int priorityqueue_length(struct priorityqueue *pq) { return pq->size; }
 
 #ifdef DEBUG
 void print_queue(struct priorityqueue *pq) {

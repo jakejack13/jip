@@ -1,6 +1,6 @@
 /** priorityqueue.h
- * Priority queue datastructure used in creating nodes for the Huffman encoding tree.
- * Implemented using binary heap
+ * Priority queue datastructure used in creating nodes for the Huffman encoding
+ * tree. Implemented using binary heap
  */
 
 #ifndef PRIORITYQUEUE_H
@@ -17,14 +17,14 @@ struct priorityqueue {
     int capacity;
 };
 
-
 /** Initializes the priority queue */
 void priorityqueue_init(struct priorityqueue *pq);
 
 /** Frees the priority queue in memory */
 void priorityqueue_free(struct priorityqueue *pq);
 
-/** Adds an element with given priority to the queue (where lower priority level == higher priority) */
+/** Adds an element with given priority to the queue (where lower priority level
+ * == higher priority) */
 void priorityqueue_add(struct priorityqueue *pq, void *elm, int priority);
 
 /** Removes and returns the element with the highest priority */
@@ -39,4 +39,4 @@ int priorityqueue_length(struct priorityqueue *pq);
 void print_queue(struct priorityqueue *pq);
 #endif
 
-#endif //PRIORITYQUEUE_H
+#endif  // PRIORITYQUEUE_H

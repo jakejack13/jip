@@ -31,7 +31,8 @@ int huffman_get_frequency(huffman_t *h) {
     return h->frequency;
 }
 
-static void huffman_assign_codes_recursive(huffman_t *h, unsigned int code, int length) {
+static void huffman_assign_codes_recursive(huffman_t *h, unsigned int code,
+                                           int length) {
     if (h == NULL) return;
 
     if (h->left == NULL && h->right == NULL) {
@@ -94,9 +95,9 @@ huffman_t *huffman_load_from_file(BITFILE *input) {
         } else {
             // It's a regular character
             int c = 0;
-            for (int i = 7; i >= 0; i--) { // Read 8 bits for the character
+            for (int i = 7; i >= 0; i--) {  // Read 8 bits for the character
                 bit = bitfile_getc(input);
-                if (bit == EOF) return NULL; // Handle unexpected EOF
+                if (bit == EOF) return NULL;  // Handle unexpected EOF
                 c = (c << 1) | bit;
             }
             return huffman_init(c, 0);
@@ -125,19 +126,18 @@ void huffman_assign_codes(huffman_t *h) {
 
 void huffman_save_to_file(huffman_t *h, BITFILE *output) {
     if (h->left == NULL && h->right == NULL) {
-        bitfile_putc(1, output); // Indicate leaf node
+        bitfile_putc(1, output);  // Indicate leaf node
         if (h->c == EOF_CHAR) {
-            bitfile_putc(1, output); // Indicate EOF_CHAR
+            bitfile_putc(1, output);  // Indicate EOF_CHAR
         } else {
-            bitfile_putc(0, output); // Indicate regular character
+            bitfile_putc(0, output);  // Indicate regular character
             for (int i = 7; i >= 0; i--) {
-            bitfile_putc((h->c >> i) & 1, output);
-        }
+                bitfile_putc((h->c >> i) & 1, output);
+            }
         }
     } else {
-        bitfile_putc(0, output); // Indicate internal node
+        bitfile_putc(0, output);  // Indicate internal node
         huffman_save_to_file(h->left, output);
         huffman_save_to_file(h->right, output);
     }
 }
-

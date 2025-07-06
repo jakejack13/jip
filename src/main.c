@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "compress.h"
 #include "bitfile.h"
+#include "compress.h"
 
 #define USAGE "usage: jip -c/-d <origin> <destination>\n"
 
